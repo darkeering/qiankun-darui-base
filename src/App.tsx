@@ -17,6 +17,7 @@ export default class App extends Component {
           </Routes>
           <div style={{ height: "calc(100vh - 65px)" }}>
             <div id="rc-child"></div>
+            <div id="ng-child"></div>
           </div>
         </Content>
       </Layout>

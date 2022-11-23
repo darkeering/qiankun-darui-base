@@ -17,7 +17,7 @@ registerMicroApps([
   {
     name: "ng-child", // 每一个子应用的名字  React应用的名字不重要
     entry: "//localhost:3002", // 子应用的端口 必须一致
-    container: "#rc-child", // 子应用在父应用的挂载点
+    container: "#ng-child", // 子应用在父应用的挂载点
     activeRule: location => location.pathname.startsWith('/ng-child'), // 父应用中激活子应用的规则
   },
 ]);
