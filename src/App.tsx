@@ -2,7 +2,7 @@ import { Layout } from "antd";
 import { Content, Header } from "antd/es/layout/layout";
 import React, { Component } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { HeaderMenu } from "./Header/HeaderMenu";
+import HeaderMenu from "./Header/HeaderMenu";
 
 export default class App extends Component {
   render() {
