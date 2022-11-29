@@ -1,46 +1,74 @@
-# Getting Started with Create React App
+# 生成项目
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+```typescript
+npx create-react-app <app-name> --template=typescript
+```
 
-## Available Scripts
+# qiankun 配置
 
-In the project directory, you can run:
+1. 添加 qiankun
 
-### `npm start`
+   ```typescript
+   yarn add qiankun
+   ```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+2. src 下添加 `public-path.js`
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+   ```typescript
+   if (window.__POWERED_BY_QIANKUN__) {
+     // eslint-disable-next-line no-undef
+     __webpack_public_path__ = window.__INJECTED_PUBLIC_PATH_BY_QIANKUN__;
+   }
+   ```
 
-### `npm test`
+3. 修改 `index.jsx`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+   ```typescript
+   import "zone.js/dist/zone"; // 如果子应用有angular，把子应用的zone.js引入删除，在base应用import
+   import React from "react";
+   import ReactDOM from "react-dom/client";
+   import "./index.css";
+   import App from "./App";
+   import reportWebVitals from "./reportWebVitals";
+   import { registerMicroApps, start } from "qiankun";
+   import { BrowserRouter } from "react-router-dom";
+   // qiankun 配置
+   registerMicroApps([
+     {
+       name: "rc-child", // 每一个子应用的名字  React应用的名字不重要
+       entry: "//localhost:3001", // 子应用的端口 必须一致
+       container: "#rc-child", // 子应用在父应用的挂载点
+       activeRule: (location) => location.pathname.startsWith("/rc-child"), // 父应用中激活子应用的规则
+     },
+     {
+       name: "ng-child", // 每一个子应用的名字  React应用的名字不重要
+       entry: "//localhost:3002", // 子应用的端口 必须一致
+       container: "#ng-child", // 子应用在父应用的挂载点
+       activeRule: (location) => location.pathname.startsWith("/ng-child"), // 父应用中激活子应用的规则
+     },
+   ]);
+   // 启动 父应用
+   start();
 
-### `npm run build`
+   const root = ReactDOM.createRoot(
+     document.getElementById("root") as HTMLElement
+   );
+   root.render(
+     <BrowserRouter>
+       <App></App>
+     </BrowserRouter>
+   );
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+   // If you want to start measuring performance in your app, pass a function
+   // to log results (for example: reportWebVitals(console.log))
+   // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+   reportWebVitals();
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# 组件库 react-darui
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# 参考链接
 
-### `npm run eject`
+> [antd 组件库](https://ant.design/components/overview-cn/)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+> [qiankun 实践](https://juejin.cn/post/6986258669172490271)
